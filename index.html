@@ -99,7 +99,6 @@
       white-space:pre-line;border:1px solid var(--line);border-radius:16px;padding:16px;font-size:14px;color:#334155;background:#fff;
     }
     .formula{background:#f8fafc}
-    .pill{display:inline-block;background:var(--blue-soft);color:#1d4ed8;font-size:12px;font-weight:900;padding:4px 10px;border-radius:999px;margin-bottom:10px}
     .emptyBox{padding:22px;border:1px dashed #cbd5e1;border-radius:16px;color:var(--muted);text-align:center;background:#f8fafc}
   </style>
 </head>
@@ -108,7 +107,7 @@
     <div class="hero">
       <div>
         <h1>2026 교원 근로소득세 · 기관부담금 계산기</h1>
-        <div class="sub">사학연금 가입 <strong>사립학교 교원</strong> 기준으로, 월 보수액 1칸만 넣으면 예상 근로소득세와 학교·법인 부담금을 함께 계산합니다.</div>
+        <div class="sub">사학연금 가입 <strong>사립학교 교원</strong> 기준으로, 월 보수액 1칸만 넣으면 예상 근로소득세, 기관부담금, 월 실수령액을 함께 계산합니다.</div>
       </div>
       <div class="badge">2026 기준 재검증 반영</div>
     </div>
@@ -138,17 +137,17 @@
 
         <div class="card assumptions">
           <div class="card-head">
-            <h2 class="title">이번 재검증에서 고친 점</h2>
-            <div class="desc">기존 파일을 다시 점검해 계산식과 가정값을 수정했습니다.</div>
+            <h2 class="title">재검증 반영 사항</h2>
+            <div class="desc">계산식과 고정 가정값을 다시 점검해 반영했습니다.</div>
           </div>
           <div class="card-body">
             <div class="audit">
-              <strong>수정 완료</strong>
+              <strong>점검 완료</strong>
               <ul>
-                <li>장기요양보험을 기존의 연동식이 아니라 <strong>2026 소득 대비 보험료율 0.9448%</strong> 기준으로 다시 계산</li>
-                <li>고용보험 근로자 부담률을 <strong>0.45% → 0.9%</strong>로 수정</li>
-                <li>근로소득공제에 <strong>한도 2,000만원</strong>를 반영</li>
-                <li>사립학교 교원 건강보험·장기요양보험의 <strong>50/30/20 분담 특례</strong>를 계산식에 명시</li>
+                <li>장기요양보험을 <strong>2026 소득 대비 보험료율 0.9448%</strong> 기준으로 계산</li>
+                <li>고용보험 근로자 부담률을 <strong>0.9%</strong>로 반영</li>
+                <li>근로소득공제에 <strong>한도 2,000만원</strong> 반영</li>
+                <li>사립학교 교원 건강보험·장기요양보험의 <strong>50/30/20 분담 특례</strong> 반영</li>
               </ul>
             </div>
           </div>
@@ -157,7 +156,7 @@
         <div class="card assumptions">
           <div class="card-head">
             <h2 class="title">계산 가정</h2>
-            <div class="desc">사용자가 1칸만 입력하도록 유지하면서 필요한 가정값을 고정했습니다.</div>
+            <div class="desc">월 보수액 1칸 입력 방식에 맞춰 필요한 가정값을 고정했습니다.</div>
           </div>
           <div class="card-body">
             <ul>
@@ -165,8 +164,9 @@
               <li>기본공제는 <strong>본인 150만원</strong>만 반영</li>
               <li>특별소득공제에는 <strong>사학연금 본인부담금, 건강보험, 장기요양보험, 고용보험 본인부담금</strong>만 반영</li>
               <li>표준세액공제 <strong>13만원</strong> 반영</li>
-              <li>기관부담금의 고용보험은 <strong>150인 미만 기준 1.15%</strong>로 계산</li>
+              <li>기관부담금의 고용보험은 <strong>150인 미만 기준 1.15%</strong> 가정</li>
               <li><strong>국가부담분</strong>(사학연금 3.706%, 건강보험 20%, 장기요양보험 20%)은 기관부담금 합계에 포함하지 않음</li>
+              <li>월 실수령액은 <strong>월 보수액 - 본인부담 사회보험 - (연간 국세+지방세 ÷ 12)</strong>로 계산</li>
             </ul>
           </div>
         </div>
@@ -176,7 +176,7 @@
         <div class="card">
           <div class="card-head">
             <h2 class="title">핵심 결과</h2>
-            <div class="desc">먼저 총액과 비율을 보고, 아래에서 공제와 구간별 세금을 확인하세요.</div>
+            <div class="desc">총액과 비율을 먼저 보고, 아래에서 공제와 구간별 세금을 확인하세요.</div>
           </div>
           <div class="card-body">
             <div id="heroResult" class="heroResult">월 보수액을 입력하고 계산하기를 누르세요.</div>
@@ -188,8 +188,11 @@
               <div class="kpi"><div class="k">예상 지방소득세</div><div class="v" id="localTax"></div></div>
               <div class="kpi"><div class="k">국세+지방세 합계</div><div class="v" id="combinedTax"></div></div>
               <div class="kpi"><div class="k">연봉 대비 근로소득세</div><div class="v" id="nationalTaxRatio"></div></div>
-              <div class="kpi"><div class="k">기관부담금(월)</div><div class="v" id="employerMonthly"></div></div>
-              <div class="kpi"><div class="k">급여 대비 기관부담금</div><div class="v" id="employerRatio"></div></div>
+              <div class="kpi"><div class="k">기관부담금(월)</div><div class="v" id="institutionMonthly"></div></div>
+              <div class="kpi"><div class="k">급여 대비 기관부담금</div><div class="v" id="institutionRatio"></div></div>
+              <div class="kpi"><div class="k">예상 월 실수령액</div><div class="v" id="monthlyNet"></div></div>
+              <div class="kpi"><div class="k">월 실수령 비율</div><div class="v" id="monthlyNetRatio"></div></div>
+              <div class="kpi"><div class="k">월 국세+지방세</div><div class="v" id="monthlyTax"></div></div>
             </div>
           </div>
         </div>
@@ -208,7 +211,7 @@
               <h2 class="title">교원 기준 기관부담금</h2>
               <div class="desc">학교·법인 부담분만 합산합니다. 국가부담분은 제외합니다.</div>
             </div>
-            <div class="card-body"><div id="employerSummary" class="list"></div></div>
+            <div class="card-body"><div id="institutionSummary" class="list"></div></div>
           </div>
         </div>
 
@@ -231,7 +234,7 @@
           <div class="card">
             <div class="card-head">
               <h2 class="title">해석</h2>
-              <div class="desc">왜 이 세율이 적용됐는지 문장으로 풀어줍니다.</div>
+              <div class="desc">세율 적용 방식과 월 실수령액까지 문장으로 풀어줍니다.</div>
             </div>
             <div class="card-body"><div id="explainBox" class="textBlock">아직 계산 전입니다.</div></div>
           </div>
@@ -284,6 +287,10 @@
       return (n * 100).toFixed(2) + '%';
     }
 
+    function row(label, value){
+      return `<div class="item"><span>${label}</span><strong>${value}</strong></div>`;
+    }
+
     function laborIncomeDeduction(gross){
       let d = 0;
       if (gross <= 5_000_000) d = gross * 0.70;
@@ -303,11 +310,11 @@
       if (gross <= 33_000_000){
         cap = 740_000;
       } else if (gross <= 70_000_000){
-        cap = Math.max(660_000, 740_000 - (gross - 33_000_000) * 0.008);
+        cap = Math.max(660_000, 740_000 - (gross - 33_000_000) * 0.002162162162162162);
       } else if (gross <= 120_000_000){
-        cap = Math.max(500_000, 660_000 - (gross - 70_000_000) * 0.5);
+        cap = Math.max(500_000, 660_000 - (gross - 70_000_000) * 0.0032);
       } else {
-        cap = Math.max(200_000, 500_000 - (gross - 120_000_000) * 0.5);
+        cap = Math.max(200_000, 500_000 - (gross - 120_000_000) * 0.003);
       }
 
       return {
@@ -342,10 +349,6 @@
       return { rows, totalTax };
     }
 
-    function row(label, value){
-      return `<div class="item"><span>${label}</span><strong>${value}</strong></div>`;
-    }
-
     function calculate(){
       const monthly = parseNumber($('monthlyPay').value);
       if (!Number.isFinite(monthly) || monthly <= 0){
@@ -357,14 +360,14 @@
       const laborDed = laborIncomeDeduction(annual);
       const laborIncome = annual - laborDed;
 
-      const pensionEmployee = annual * RATES.pensionEmployee;
-      const healthEmployee = annual * RATES.healthTotal * RATES.teacherHealthEmployeeShare;
-      const ltcEmployee = annual * RATES.ltcTotal * RATES.teacherLtcEmployeeShare;
-      const employmentEmployee = annual * RATES.employmentEmployee;
-      const basicDeduction = RATES.basicDeduction;
+      const pensionEmployeeAnnual = annual * RATES.pensionEmployee;
+      const healthEmployeeAnnual = annual * RATES.healthTotal * RATES.teacherHealthEmployeeShare;
+      const ltcEmployeeAnnual = annual * RATES.ltcTotal * RATES.teacherLtcEmployeeShare;
+      const employmentEmployeeAnnual = annual * RATES.employmentEmployee;
+      const basicDeductionAnnual = RATES.basicDeduction;
 
-      const otherIncomeDeductions = pensionEmployee + healthEmployee + ltcEmployee + employmentEmployee + basicDeduction;
-      const taxBase = Math.max(0, laborIncome - otherIncomeDeductions);
+      const deductibleTotalAnnual = pensionEmployeeAnnual + healthEmployeeAnnual + ltcEmployeeAnnual + employmentEmployeeAnnual + basicDeductionAnnual;
+      const taxBase = Math.max(0, laborIncome - deductibleTotalAnnual);
 
       const brackets = getBrackets(taxBase);
       const calculatedTax = brackets.totalTax;
@@ -373,17 +376,25 @@
       const localTax = nationalTax * 0.10;
       const combinedTax = nationalTax + localTax;
 
-      const pensionEmployer = annual * RATES.pensionEmployer;
-      const healthEmployer = annual * RATES.healthTotal * RATES.teacherHealthEmployerShare;
-      const ltcEmployer = annual * RATES.ltcTotal * RATES.teacherLtcEmployerShare;
-      const accidentEmployer = annual * RATES.accidentEmployer;
-      const employmentEmployer = annual * RATES.employmentEmployerAssumed;
-      const employerAnnual = pensionEmployer + healthEmployer + ltcEmployer + accidentEmployer + employmentEmployer;
-      const employerMonthly = employerAnnual / 12;
+      const pensionInstitutionAnnual = annual * RATES.pensionEmployer;
+      const healthInstitutionAnnual = annual * RATES.healthTotal * RATES.teacherHealthEmployerShare;
+      const ltcInstitutionAnnual = annual * RATES.ltcTotal * RATES.teacherLtcEmployerShare;
+      const accidentInstitutionAnnual = annual * RATES.accidentEmployer;
+      const employmentInstitutionAnnual = annual * RATES.employmentEmployerAssumed;
+      const institutionAnnual = pensionInstitutionAnnual + healthInstitutionAnnual + ltcInstitutionAnnual + accidentInstitutionAnnual + employmentInstitutionAnnual;
+      const institutionMonthly = institutionAnnual / 12;
 
-      const healthState = annual * RATES.healthTotal * RATES.teacherHealthStateShare;
-      const ltcState = annual * RATES.ltcTotal * RATES.teacherLtcStateShare;
-      const pensionState = annual * RATES.pensionState;
+      const healthStateAnnual = annual * RATES.healthTotal * RATES.teacherHealthStateShare;
+      const ltcStateAnnual = annual * RATES.ltcTotal * RATES.teacherLtcStateShare;
+      const pensionStateAnnual = annual * RATES.pensionState;
+
+      const pensionEmployeeMonthly = pensionEmployeeAnnual / 12;
+      const healthEmployeeMonthly = healthEmployeeAnnual / 12;
+      const ltcEmployeeMonthly = ltcEmployeeAnnual / 12;
+      const employmentEmployeeMonthly = employmentEmployeeAnnual / 12;
+      const employeeSocialMonthly = pensionEmployeeMonthly + healthEmployeeMonthly + ltcEmployeeMonthly + employmentEmployeeMonthly;
+      const monthlyTax = combinedTax / 12;
+      const monthlyNet = monthly - employeeSocialMonthly - monthlyTax;
 
       const active = brackets.rows.filter(r => r.taxableAmount > 0);
       const top = active.length ? active[active.length - 1] : null;
@@ -392,8 +403,8 @@
       $('heroResult').innerHTML =
         `월 보수액 <strong>${won(monthly)}</strong>를 기준으로 계산하면, ` +
         `연봉은 <strong>${won(annual)}</strong>이고, 예상 근로소득세(국세)는 <strong>${won(nationalTax)}</strong>입니다. ` +
-        `이는 연봉의 <strong>${pct(nationalTax / annual)}</strong>이며, ` +
-        `학교·법인 부담금은 월 <strong>${won(employerMonthly)}</strong>, 즉 월 보수액의 <strong>${pct(employerMonthly / monthly)}</strong>로 계산됩니다.`;
+        `국세와 지방소득세를 12개월로 나눠 낸다고 가정하면 월 세금은 <strong>${won(monthlyTax)}</strong>, ` +
+        `예상 월 실수령액은 <strong>${won(monthlyNet)}</strong>입니다.`;
 
       $('kpiGrid').style.display = 'grid';
       $('annualPay').textContent = won(annual);
@@ -403,17 +414,20 @@
       $('localTax').textContent = won(localTax);
       $('combinedTax').textContent = won(combinedTax);
       $('nationalTaxRatio').textContent = pct(nationalTax / annual);
-      $('employerMonthly').textContent = won(employerMonthly);
-      $('employerRatio').textContent = pct(employerMonthly / monthly);
+      $('institutionMonthly').textContent = won(institutionMonthly);
+      $('institutionRatio').textContent = pct(institutionMonthly / monthly);
+      $('monthlyNet').textContent = won(monthlyNet);
+      $('monthlyNetRatio').textContent = pct(monthlyNet / monthly);
+      $('monthlyTax').textContent = won(monthlyTax);
 
       $('summary').innerHTML = [
         row('근로소득공제', `- ${won(laborDed)}`),
         row('근로소득금액', won(laborIncome)),
-        row('사학연금 본인부담 (9%)', `- ${won(pensionEmployee)}`),
-        row('건강보험 본인부담 (교원 50%)', `- ${won(healthEmployee)}`),
-        row('장기요양보험 본인부담 (교원 50%)', `- ${won(ltcEmployee)}`),
-        row('고용보험 본인부담 (0.9%)', `- ${won(employmentEmployee)}`),
-        row('기본공제 (본인)', `- ${won(basicDeduction)}`),
+        row('사학연금 본인부담 (9%)', `- ${won(pensionEmployeeAnnual)}`),
+        row('건강보험 본인부담 (교원 50%)', `- ${won(healthEmployeeAnnual)}`),
+        row('장기요양보험 본인부담 (교원 50%)', `- ${won(ltcEmployeeAnnual)}`),
+        row('고용보험 본인부담 (0.9%)', `- ${won(employmentEmployeeAnnual)}`),
+        row('기본공제 (본인)', `- ${won(basicDeductionAnnual)}`),
         row('과세표준', won(taxBase)),
         row('적용된 최고 세율 구간', top ? `${Math.round(top.rate * 100)}% 구간` : '없음'),
         row('산출세액', won(calculatedTax)),
@@ -423,38 +437,39 @@
         row('예상 지방소득세', won(localTax)),
         row('국세+지방세 합계', won(combinedTax)),
         row('연봉 대비 근로소득세 비율', pct(nationalTax / annual)),
-        row('연봉 대비 국세+지방세 비율', pct(combinedTax / annual))
+        row('연봉 대비 국세+지방세 비율', pct(combinedTax / annual)),
+        row('월 본인부담 4대보험 등 합계', won(employeeSocialMonthly)),
+        row('월 국세+지방세(12개월 균등 가정)', won(monthlyTax)),
+        row('예상 월 실수령액', won(monthlyNet)),
+        row('월 보수액 대비 실수령 비율', pct(monthlyNet / monthly))
       ].join('');
 
-      $('employerSummary').innerHTML = [
-        row('사학연금 법인부담 (5.294%)', won(pensionEmployer)),
-        row('건강보험 사용자부담 (교원 30%)', won(healthEmployer)),
-        row('장기요양보험 사용자부담 (교원 30%)', won(ltcEmployer)),
-        row('재해보상부담금', won(accidentEmployer)),
-        row('고용보험 사업주부담 (가정 1.15%)', won(employmentEmployer)),
-        row('기관부담금 합계(연)', won(employerAnnual)),
-        row('기관부담금 합계(월)', won(employerMonthly)),
-        row('연봉 대비 기관부담금 비율', pct(employerAnnual / annual)),
-        row('월 보수액 대비 기관부담금 비율', pct(employerMonthly / monthly)),
-        row('참고: 국가부담 사학연금', won(pensionState)),
-        row('참고: 국가부담 건강보험', won(healthState)),
-        row('참고: 국가부담 장기요양보험', won(ltcState))
+      $('institutionSummary').innerHTML = [
+        row('사학연금 법인부담 (5.294%)', won(pensionInstitutionAnnual)),
+        row('건강보험 사용자부담 (교원 30%)', won(healthInstitutionAnnual)),
+        row('장기요양보험 사용자부담 (교원 30%)', won(ltcInstitutionAnnual)),
+        row('재해보상부담금', won(accidentInstitutionAnnual)),
+        row('고용보험 사업주부담 (가정 1.15%)', won(employmentInstitutionAnnual)),
+        row('기관부담금 합계(연)', won(institutionAnnual)),
+        row('기관부담금 합계(월)', won(institutionMonthly)),
+        row('연봉 대비 기관부담금 비율', pct(institutionAnnual / annual)),
+        row('월 보수액 대비 기관부담금 비율', pct(institutionMonthly / monthly)),
+        row('참고: 국가부담 사학연금', won(pensionStateAnnual)),
+        row('참고: 국가부담 건강보험', won(healthStateAnnual)),
+        row('참고: 국가부담 장기요양보험', won(ltcStateAnnual))
       ].join('') + `<div class="caption">참고 항목의 국가부담분은 기관부담금 합계에 포함하지 않았습니다.</div>`;
 
-      let rowsHtml = '';
-      for (const r of brackets.rows){
-        rowsHtml += `
-          <tr>
-            <td>${r.label}</td>
-            <td>${Math.round(r.rate * 100)}%</td>
-            <td>${r.taxableAmount > 0 ? won(r.taxableAmount) : '적용 없음'}</td>
-            <td>${r.taxableAmount > 0 ? won(r.tax) : '-'}</td>
-            <td>${r.taxableAmount > 0 ? `과세표준 중 ${won(r.taxableAmount)}이 ${Math.round(r.rate * 100)}% 구간에 있어 ${won(r.tax)}의 산출세액을 만듭니다.` : '-'}</td>
-          </tr>`;
-      }
+      const rowsHtml = brackets.rows.map(r => `
+        <tr>
+          <td>${r.label}</td>
+          <td>${Math.round(r.rate * 100)}%</td>
+          <td>${r.taxableAmount > 0 ? won(r.taxableAmount) : '적용 없음'}</td>
+          <td>${r.taxableAmount > 0 ? won(r.tax) : '-'}</td>
+          <td>${r.taxableAmount > 0 ? `과세표준 중 ${won(r.taxableAmount)}은 ${Math.round(r.rate * 100)}% 구간에 있으며, ${won(r.tax)}의 산출세액을 발생시키고 있습니다.` : '-'}</td>
+        </tr>`).join('');
 
       const narrative = active.map(r =>
-        `- 과세표준 중 ${won(r.taxableAmount)}은 ${Math.round(r.rate * 100)}% 구간에 있으며, 이 구간에서 ${won(r.tax)}의 산출세액이 발생합니다.`
+        `- 과세표준 중 ${won(r.taxableAmount)}은 ${Math.round(r.rate * 100)}% 구간에 있으며, ${won(r.tax)}의 산출세액을 발생시키고 있습니다.`
       ).join('\n');
 
       $('bracketWrap').innerHTML = `
@@ -491,6 +506,11 @@
 결정세액(예상 근로소득세) = 산출세액 - 근로소득세액공제 - 표준세액공제 13만원
 지방소득세 = 근로소득세의 10%
 
+월 실수령액 가정:
+- 월 본인부담 공제 = 월 사학연금 + 월 건강보험 + 월 장기요양보험 + 월 고용보험
+- 월 세금 = (연간 국세 + 지방세) ÷ 12
+- 예상 월 실수령액 = 월 보수액 - 월 본인부담 공제 - 월 세금
+
 교원 기준 기관부담금:
 - 사학연금 법인부담 = 연봉 × 5.294%
 - 건강보험 사용자부담 = 연봉 × 7.19% × 30%
@@ -499,20 +519,26 @@
 - 고용보험 사업주부담 = 연봉 × 1.15% (150인 미만 가정)`;
 
       $('explainBox').textContent =
-`입력한 연봉 전체에 최고세율을 바로 곱하는 방식이 아닙니다.
+`입력한 연봉 전체에 최고세율을 한 번에 곱하는 방식이 아닙니다.
 
 이번 계산에서 연봉은 ${won(annual)}이고, 공제 후 실제로 세율이 적용되는 과세표준은 ${won(taxBase)}입니다.
-따라서 현재 적용된 최고 세율 구간은 ${top ? Math.round(top.rate * 100) + '%' : '-'}입니다.
-즉, ${top ? Math.round(top.rate * 100) + '%가 연봉 전체에 붙는 것이 아니라' : '세율 구간을 나눈 뒤'} 해당 구간에 들어간 금액에만 그 세율이 붙습니다.
+따라서 현재 적용된 최고 세율 구간은 ${top ? Math.round(top.rate * 100) + '%' : '-'}입니다. 다만 ${top ? Math.round(top.rate * 100) + '%가 연봉 전체에 붙는 것이 아니라, 그 구간에 들어간 과세표준에만 해당 세율이 적용됩니다.' : '구간별로 나누어 세율이 적용됩니다.'}
 
 구간별 설명:
 ${narrative || '- 적용 구간이 없습니다.'}
 
+월 실수령액 설명:
+- 월 보수액: ${won(monthly)}
+- 월 본인부담 공제 합계: ${won(employeeSocialMonthly)}
+- 월 국세+지방세(12개월 균등 가정): ${won(monthlyTax)}
+- 예상 월 실수령액: ${won(monthlyNet)}
+
 최종 정리:
 - 예상 근로소득세(국세): ${won(nationalTax)}
 - 지방소득세 포함 합계: ${won(combinedTax)}
-- 교원 기준 기관부담금(월): ${won(employerMonthly)}
-- 교원 기준 기관부담금(연): ${won(employerAnnual)}`;
+- 교원 기준 기관부담금(월): ${won(institutionMonthly)}
+- 교원 기준 기관부담금(연): ${won(institutionAnnual)}
+- 예상 월 실수령액: ${won(monthlyNet)} (${pct(monthlyNet / monthly)})`;
     }
 
     function resetAll(){
@@ -521,18 +547,14 @@ ${narrative || '- 적용 구간이 없습니다.'}
       $('heroResult').textContent = '월 보수액을 입력하고 계산하기를 누르세요.';
       $('kpiGrid').style.display = 'none';
       $('summary').innerHTML = '';
-      $('employerSummary').innerHTML = '';
+      $('institutionSummary').innerHTML = '';
       $('bracketWrap').className = 'emptyBox';
       $('bracketWrap').textContent = '아직 계산 전입니다.';
       $('formulaBox').textContent = '아직 계산 전입니다.';
       $('explainBox').textContent = '아직 계산 전입니다.';
-      $('monthlyPay').focus();
     }
 
-    $('monthlyPay').addEventListener('input', (e) => {
-      const raw = e.target.value.replace(/[^\d]/g, '');
-      e.target.value = raw ? Number(raw).toLocaleString('ko-KR') : '';
-    });
+    $('monthlyPay').addEventListener('blur', (e) => formatInputValue(e.target));
     $('monthlyPay').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') calculate();
     });
